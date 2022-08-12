@@ -3,6 +3,17 @@ uuid = "ce5a3596-169c-4da3-abc1-673cd3236ed8"
 authors = ["Angus Russell"]
 version = "0.1.0"
 
+[deps]
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+Dierckx = "39dd38d3-220a-591b-8e3c-4c3a8c710a94"
+Glob = "c27321d9-0574-5035-807b-f59d2c89b15c"
+Hilbert = "5befdd30-5572-5129-8422-0c92d957d47a"
+LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
+LsqFit = "2fda8390-95c7-5789-9bda-21331edee243"
+PyPlot = "d330b81b-6aea-500a-939a-2ce795aea3ee"
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+
 [compat]
 julia = "1"
 
