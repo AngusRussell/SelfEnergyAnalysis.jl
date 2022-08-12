@@ -1,0 +1,3 @@
+[deps]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+SelfEnergyAnalysis = "ce5a3596-169c-4da3-abc1-673cd3236ed8"
