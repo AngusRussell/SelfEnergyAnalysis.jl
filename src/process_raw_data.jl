@@ -8,7 +8,7 @@ Path of folder specified in `File_path` as a `String` with "`/`" between folders
 `header` argument of function skipps the header positions in the CSV. If there are no headers, enter `false`.
 
 # Example
-```jldoctest
+```
 julia> BK30, λ30 = load_all("BK30KM32d3L/BK30KM32d3L/raw_data", "csv", 400, 1340, 3);
 
 julia> BK40, λ40 = load_all("20220718 FF SPE-BK40KM32d4T4K-20140304", "dat", 400, 1340, false)
@@ -56,7 +56,7 @@ The `filenumber` value selects the pump-power that is plotted to provide a visua
 The output returns the cropped PL `Array` and wavelength `Vector` and also prints the chosen cropping pixels so one can use these values in the other `crop_data` method and skip the interactie process.
 
 # Example
-```jldoctest
+```
 julia> crop_data(BK40, λ, 19);
 Input lower bound for E pixel (between 1:1340):
 580 
@@ -224,7 +224,7 @@ end
 Crop raw `Array` of PL data, `Data3D`, to region of interest defined by the `k_bounds` and `E_bounds` tuples and then reduces wavelength `Vector`, `λ`, accordingly.
 
 # Example
-```jldoctest
+```
 julia> BK30, λ = load_all("BK30KM32d3L/BK30KM32d3L/raw_data", 400, 1340, 3);
 
 julia> BK30_cropped, λ_cropped = crop_data(BK30, λ, (42,294), (350,1170))
@@ -294,7 +294,7 @@ Looking at the BK30 data set:
 
 One can see that the third and fourth file have the same pump power but different exposure times. Therefore to calculate the correction factor:
 
-```jldoctest
+```
 julia> BK30, λ = load_all("BK30KM32d3L\\BK30KM32d3L\\raw_data", 400, 1340, 3);
 
 julia> BK30, λ = crop_data(BK30, λ, (42,294), (350, 1170));
@@ -327,12 +327,12 @@ end
 Takes `Array` of cropped PL data and sets all intensity values bellow user defined `Background` value to zero.
 
 # Example
-```jldoctest
+```
 BK30 = remove_background(BK30_cropped, 658)
 252×820×17 Array{Float64, 3}: ...
 ```
 """
-function remove_background(Data3D::Array, Background::Int)
+function remove_background(Data3D::Array, Background::Number)
     Data3D = Data3D .- Background
     for k = 1:size(Data3D,3)
         for i = 1:size(Data3D,1)
@@ -355,7 +355,7 @@ This function loads, crops and corrects the BK30 data provided the folder is in 
 User can look to this function as a guide of how to combine functions `load_all`, `crop_data` and `attenuation_correction_scalar` in order to create their own function for processing PL datasets.
 
 # Example
-```jldoctest
+```
 julia> BK30, λ30 = correct_BK30();
 ```
 """
@@ -400,7 +400,7 @@ This function loads, crops and corrects the BK40 data provided the folder is in 
 User can look to this function as a guide of how to combine functions `load_all`, `crop_data` and `attenuation_correction_scalar` in order to create their own function for processing PL datasets.
 
 # Example
-```jldoctest
+```
 julia> BK40, λ40 = correct_BK40();
 ```
 """
@@ -436,7 +436,7 @@ Takes 2D `Array` of corrected PL data and finds k=0 pixel. Returns a pixel to k 
 This function is also written in a way specific to the BK30KM32d3L data set with regards to the pixel range to search in. May need ot be changed when applying to different data sets.
 
 # Example
-```jldoctest
+```
 julia> k, k0 = pixel_to_k(BK30[:,:,2])
 (k, 127.3497705660506)
 
@@ -484,7 +484,7 @@ end
 Converts `Vector` containing wavelength values to 'Vector' containing energy values in units of eV.
 
 # Example
-```jldoctest
+```
 julia> E = λ_to_E(λ)
 820-element Vector{Float64}:
  1.5926313998361783

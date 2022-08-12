@@ -4,7 +4,7 @@
 Adds `n` many copies of the first value to start of the `Vector`; `a`, and `n` many copies of the last value to the end of the `Vector`; `a`.
 
 # Example
-```jldoctest
+```
 julia> a = [1, 2, 3]
 3-element Vector{Int64}:
  1
@@ -38,7 +38,7 @@ end
 Removes `n` many copies of the first value at the start of the `Vector`, and `n` many copies of the last value at the end of  the `Vector`.
 
 # Example
-```jldoctest
+```
 julia> a
 9-element Vector{Int64}:
  1
@@ -72,7 +72,7 @@ end
 Searches `x` for the value `val` and returns the number index of the closest element to `val`.
 
 # Example
-```jldoctest
+```
 julia> closest_index(BK30, 3.442828e7)
 2659737
 
@@ -96,10 +96,10 @@ end
 """
     remove_NaN!(a, b)
 
-Takes two `Vectors` `a` and `b`. If `a` has ``NaN`` value it is removed along with the value at the same index in `b`.
+Takes two `Vectors` `a` and `b`. If `a` has `NaN` value it is removed along with the value at the same index in `b`.
 
 # Example
-```jldoctest
+```
 julia> a = [1, 2, 3, 4, NaN, 6, 7]
 7-element Vector{Float64}:
    1.0

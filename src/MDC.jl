@@ -6,7 +6,7 @@ Takes 1D `Array` from an MDC slice and the k=0 pixel position as input arguments
 Works by spltting the 1D array in half and fitting a Lorentzian to each half. The while loop iterates over FWHM guesses until error is bellow 10%. Outputs two-element vectors for [left, right].
 
 # Example
-```jldoctest
+```
 julia> a = mdc_cut_fitting(BK30[:, 400, 1], 127)
 ([54.41649841536545, 196.0629539893839], [4.7169058911427, 4.260537357643257], [151979.8538251738, 153258.70844523172], [0.08557859215563718, 0.01824745949260817], [2.795246138912238, 2.368404937164352], [1.9758323318893516, 1.6765989709644558], [20512.0437378922, 22900.28601878591], [17987.0, 20207.0], [53, 69])
 
@@ -107,7 +107,7 @@ The roots of this spline are then found to give k1 and k2. This function is best
 are not well described by a Lorentzian function. If they are, one should intead use [`mdc_cut_fitting`](@ref).
 
 # Example
-```jldoctest
+```
 julia> km, k1, k2 = mdc_cut_maximum(BK40[:,200, 5], 200)
 ([154, 250], [158.26734665230455, 245.55269763749718], [150.9186355501067, 251.4735060057741])
 ```
@@ -154,7 +154,7 @@ Takes a 2D `Array` of PL data, sweeps through the energy pixels and applies the 
 Returns `km`, `k1` and `k2` as defined in [Kordyuk et al.](https://arxiv.org/pdf/cond-mat/0510421.pdf) as `Arrays` with dimensions [length(E), 2] where column 1, i.e. [:,1], is the negative k-values and column 2, i.e. [:,2], is the positvie k-values.
 
 # Exampple
-```jldoctest
+```
 julia> BK40, λ = correct_BK40();
 
 julia> km, k1, k2 = MDC_protocol_maximum(BK40[:,:,5])
@@ -200,7 +200,7 @@ Take 2D `Array` of ``corrected`` PL values and perform MDC analysis, extracting 
 
 Optional `cutoff` parameter changes the thershold below which the MDC cuts are not applied. The default value is 10% of the global maximum.
 # Example
-```jldoctest
+```
 julia> x0_df, FWHM_df, scale_factor_df, maximum_df= MDC_fitting_protocol(BK30[:,:,2])
 (820×4 DataFrame
  Row │ Left x0  Right x0  Error Left  Error Right 
@@ -326,7 +326,7 @@ Take 2D PL data `Array` and performs the mdc protocol with Lorentazian fitting. 
 The Boolean argument `plot_true_or_false` will plot the results of `MDC_protocol_fitting` if `true`.
 
 # Example
-```jldoctest
+```
 julia> kL, kR, EmL, EmR, HWHM_L, HWHM_R = MDC(BK30[:,:,8], λ30, true)
 ([NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN  …  NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN], [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN  …  NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN], [1.5926313998361783, 1.5926122982432607, 1.592593197717957, 1.5925740982602512, 1.592554999870126, 1.5925359025475647, 1.5925168062925505, 1.5924977111050667, 1.5924786169850962, 1.5924595239326225  …  1.5775073811557567, 1.5774891386045762, 1.5774708971065752, 1.5774526566617348, 1.577434417270037, 1.577416178931463, 1.5773979416459927, 1.577379705413609, 1.5773614702342915, 1.5773432361080215], [1.5773432361080215, 1.5773614702342915, 1.577379705413609, 1.5773979416459927, 1.577416178931463, 1.577434417270037, 1.5774526566617348, 1.5774708971065752, 1.5774891386045762, 1.5775073811557567  …  1.5924595239326225, 1.5924786169850962, 1.5924977111050667, 1.5925168062925505, 1.5925359025475647, 1.592554999870126, 1.5925740982602512, 1.592593197717957, 1.5926122982432607, 1.5926313998361783], [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN  …  NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN], [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN  …  NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN])
 ```
@@ -396,7 +396,7 @@ Plot_MDC_Cut(Data2D::Array, E_index::Int)
 Takes 2D PL data `Array` and plots the MDC cut for a given energy pixel `E_index`.
 
 # Example
-```jldoctest
+```
 julia> Plot_MDC_Cut(BK30[:,:,5], 200)
 [210.67258734120222, 215.9525458388472]
 PyObject Text(185.77777777777777, 0.5, 'I~(\\mathrm{a.u.})')

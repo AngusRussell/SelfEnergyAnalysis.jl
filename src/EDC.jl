@@ -64,7 +64,7 @@ the energy value, `Em`, coresponding to the point of maximum of intensity, the e
 of the maximum intensity on the outside of the dispersion for this EDC cut, and `Imax` which is the maximum intensity value for this EDC cut.
 
 # Example
-```jldoctest
+```
 julia> E1, Em, E2, I_max = edc_cut_maximum(BK40[200, :, 15], λ)
 (1.5895804879913749, 1.5886352646653834, 1.5883235118369141, 403666.1971701594)
 ```
@@ -100,7 +100,7 @@ maximumum intensity of the cut greater than 10% of the global 2D maximum. If thi
 Returns: E1, Em, E2, and I_max as descirbed in [`edc_cut_maximum`](@ref) as `Vectors`
 
 # Example
-```jldoctest
+```
 julia> E1, Em , E2, I_max = EDC_protocol_maximum(BK40[:,:,10], λ)
 ([NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN  …  NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN], [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN  …  NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 
 NaN], [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN  …  NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN], [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN  …  NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 
@@ -136,7 +136,7 @@ maximumum intensity of the cut greater than 10% of the global 2D maximum. If thi
 Returns: `DataFrames`:`E_EDC_df`, `FWHM_EDC_df`, `I_EDC_df` containing `Em`, `FWHM` and the maximum intensity from the Lorentzian fit respectively with the corresponding errors in the second column of each `DataFrames`
 
 # Example
-```jldoctest
+```
 julia> Em_df, FWHM_df, I_df = EDC_protocol_fitting(BK30[:,:,7], λ30)
 (252×2 DataFrame
  Row │ E        % error 
@@ -198,7 +198,7 @@ maximumum intensity of the cut greater than 10% of the global 2D maximum. `NaN` 
 Returns: 1D splines of `E1`, `Em` and `E2` as well as momentum `Vector`, `kpoints`.
 
 # Example
-```jldoctest
+```
 julia> E1_S, Em_S, E2_S, kpoints = EDC_protocol_multi(BK40[:,:,8], λ)
 (Spline1D(knots=[-3.23249e6,-3.14809e6 … 3.43511e6,3.64611e6] (159 elements), k=3, extrapolation="nearest", residual=0.0), Spline1D(knots=[-3.23249e6,-3.14809e6 … 
 ```
@@ -245,12 +245,12 @@ Extract EDC energy band from 2D `Array` of ``corrected`` PL data usign the [`EDC
 Boolean argument `plot_true_or_false`, if true will plot a contour plot of `Data2D` with `Em` on top, a plot of `FWHM` and a plot of `I_max`.
 
 # Example
-```jldoctest
+```
 julia> Eb , kpoints = energy_band_fit(BK30[:,:,1], λ30, false)
 (Spline1D(knots=[-4.43395e6,-4.34955e6 … 3.87945e6,3.96385e6] (198 elements), k=3, extrapolation="nearest", residual=0.0), [-4.433952447799907e6..., 3.921647552200093e6, 3.963847552200093e6])
 ```
 # Example
-```jldoctest
+```
 julia> Em , kpoints = energy_band_fit(BK30[:,:,10], λ30, true)
 (Spline1D(knots=[-4.40091e6,-4.31651e6 … 3.91249e6,3.99689e6] (198 elements), k=3, extrapolation="nearest", residual=0.0), [-4.400906861643888e6, ... 3.996893138356112e6])
 ```
@@ -290,19 +290,19 @@ function energy_band_fit(Data2D::Array, λ, plot_true_or_false::Bool)
 end
 
 """
-    energy_band_max(Data2D, )
+    energy_band_max(Data2D,  λ, plot_true_or_false)
 
 Extract EDC energy band from 2D `Array` of ``corrected`` PL data usign the [`EDC_protocol_maximum`](@ref) function. Returns spline of energy band E(k) and a momentum `Vector`, `kpoints`.
 
 Boolean argument `plot_true_or_false`, if true will plot a contour plot of `Data2D` with `Em` on top and a plot of `I_max`.
 
 # Example
-```jldoctest
+```
 julia> Eb, kpoints = energy_band_max(BK40[:,:,1], λ, false)
 (Spline1D(knots=[-3.43803e6,-3.22703e6 … 3.65157e6,3.86257e6] (166 elements), k=3, extrapolation="nearest", residual=0.0), [-3.438033828309086e6, ... , 3.862566171690914e6])
 ```
 # Example 
-```jldoctest
+```
 julia> Em, kpoints = energy_band_max(BK40[:,:,13], λ, true)
 (Spline1D(knots=[-3.20919e6,-3.12479e6 … 3.33181e6,3.41621e6] (156 elements), k=3, extrapolation="nearest", residual=0.0), [-3.2091919945912804e6, ..., 3.4162080054087196e6])
 ```
