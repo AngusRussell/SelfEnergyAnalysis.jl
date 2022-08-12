@@ -1,16 +1,16 @@
 module SelfEnergyAnalysis
 
 # Write your package code here.
-using CSV
-using DataFrames
-using Glob
-using Hilbert
-using Dierckx
-using LsqFit
-using Statistics
-using LaTeXStrings
-using PyPlot
-#pygui(true)
+using CSV   # https://github.com/JuliaData/CSV.jl
+using DataFrames    # https://github.com/JuliaData/DataFrames.jl 
+using Glob  # https://github.com/JuliaPackageMirrors/Glob.jl
+using Hilbert   # https://github.com/fpreiswerk/Hilbert.jl
+using Dierckx   # https://github.com/kbarbary/Dierckx.jl
+using LsqFit    # https://github.com/JuliaNLSolvers/LsqFit.jl
+using Statistics    # https://github.com/JuliaStats/Statistics.jl
+using LaTeXStrings  # https://github.com/stevengj/LaTeXStrings.jl
+using PyPlot    # https://github.com/JuliaPy/PyPlot.jl
+
 
 include("plotting_presets.jl") # add mirror
 include("process_raw_data.jl") # complete
