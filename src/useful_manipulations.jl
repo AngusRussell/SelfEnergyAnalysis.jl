@@ -225,11 +225,12 @@ function kCropGUI(k::Vector, E::Vector, Eb)
     kL_lowerbound = 0
     kL_upperbound = 0
     while not_cropped
-        fig()
+        fig(10,10)
         plt.plot(k, E)
         plt.plot(k, Eb(k), color = "orange", linestyle = ":")
         plt.legend(["Data", "Bare-band"])
         plt.xlim([k[1], 0])
+        display(gcf())
         if skip_factor == 0
 
             plt.title("Input lower bound for negative k:", weight = "bold")
@@ -245,6 +246,7 @@ function kCropGUI(k::Vector, E::Vector, Eb)
             plt.plot(fill(kL_lowerbound, length(E)), E, color="red", linestyle = "-.")
 
             plt.title("Input upper bound for negative k:", weight = "bold")
+            display(gcf())
             println("Input upper bound for negative k:")
             kL_upperbound = try parse(Float64,readline())
             catch e
@@ -255,8 +257,7 @@ function kCropGUI(k::Vector, E::Vector, Eb)
                 kL_upperbound *= -1
             end
             plt.plot(fill(kL_upperbound, length(E)), E, color="red", linestyle = "--")
-
-
+            display(gcf())
             println("Happy with negative k crop? (y/n) or (skip) for mirrored")
             answerL = readline()
             if answerL == "y" || answerL =="yes" || answerL =="Yes"
@@ -272,6 +273,7 @@ function kCropGUI(k::Vector, E::Vector, Eb)
         end
         plt.xlim([0, k[end]])
         plt.title("Input lower bound for positive k:", weight = "bold")
+        display(gcf())
         println("Input lower bound for positive k:")
         kR_lowerbound = try abs(parse(Float64,readline()))
         catch e
@@ -282,6 +284,7 @@ function kCropGUI(k::Vector, E::Vector, Eb)
         plt.plot(fill(kR_lowerbound, length(E)), E, color="red", linestyle="-.")
 
         plt.title("Input upper bound for positive k:", weight = "bold")
+        display(gcf())
         println("Input upper bound for positve k:")
         kR_upperbound = try abs(parse(Float64,readline()))
         catch e
@@ -290,6 +293,7 @@ function kCropGUI(k::Vector, E::Vector, Eb)
             continue
         end
         plt.plot(fill(kR_upperbound, length(E)), E, color="red", linestyle="--")
+        display(gcf())
         println("Happy with positive k crop? (y/n)")
         answerR = readline()
         if answerR == "y" || answerR =="yes" || answerR =="Yes"
@@ -299,6 +303,7 @@ function kCropGUI(k::Vector, E::Vector, Eb)
             end
             plt.xlim([k[1], k[end]])
             plt.xticks([kL_lowerbound, kL_upperbound, kR_lowerbound, kR_upperbound])
+            display(gcf())
             println("Happy with crop? (y/n)")
             answer = readline()
             if answer == "y" || answer =="yes" || answer =="Yes"

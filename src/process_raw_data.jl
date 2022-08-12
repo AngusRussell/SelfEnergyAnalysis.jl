@@ -78,17 +78,19 @@ E tuple: (580, 815)
 See also [`load_all`](@ref)
 """
 function crop_data(Data3D::Array, λ::Vector, filenumber::Integer)
+    ion()
     not_cropped = true
     E_lowerbound, E_upperbound, k_lowerbound, k_upperbound = 0, 0, 0, 0;
     skip_factor = 0
     E_max = size(Data3D,2)
     k_max = size(Data3D,1)
     while not_cropped
-        fig()
+        fig(10,10)
         plt.contourf(Data3D[:,:,filenumber])
         
         if skip_factor == 0
             plt.title("Input lower bound for E pixel (between 1:$E_max):", weight = "bold")
+            display(gcf())
             println("Input lower bound for E pixel (between 1:$E_max):")
             E_lowerbound = try parse(Int64,readline())
                 catch e
@@ -106,6 +108,7 @@ function crop_data(Data3D::Array, λ::Vector, filenumber::Integer)
         if skip_factor == 1
             plt.plot(fill(E_lowerbound, k_max-1), 1:k_max-1, color = "red")
             plt.title("Input upper bound for E pixel (between $E_lowerbound:$E_max):", weight = "bold")
+            display(gcf())
             println("Input upper bound for E pixel (between $E_lowerbound:$E_max):")
             E_upperbound = try parse(Int64,readline())
             catch e
@@ -117,6 +120,7 @@ function crop_data(Data3D::Array, λ::Vector, filenumber::Integer)
                 continue
             end
             plt.plot(fill(E_upperbound, k_max-1), 1:k_max-1, color = "red")
+            display(gcf())
             # Chance to redo E crop
             println("Are you happy with the Energy crop? (Answers: yes/y | no/n | exit )")
             answer = readline()
@@ -138,6 +142,7 @@ function crop_data(Data3D::Array, λ::Vector, filenumber::Integer)
             plt.plot(fill(E_upperbound, k_max-1), 1:k_max-1, color = "red")
 
             plt.title("Input lower bound for k pixel (between 1:$k_max):", weight = "bold")
+            display(gcf())
             println("Input lower bound for k pixel (between 1:$k_max):")
             k_lowerbound = try parse(Int64,readline())
             catch e
@@ -156,6 +161,7 @@ function crop_data(Data3D::Array, λ::Vector, filenumber::Integer)
             plt.plot(fill(E_upperbound, k_max-1), 1:k_max-1, color = "red")
             plt.plot(1:E_max-1, fill(k_lowerbound, E_max-1), color="red")
             plt.title("Input lower bound for k pixel (between $k_lowerbound:$k_max):", weight = "bold")
+            display(gcf())
             println("Input upper bound for k pixel (between $k_lowerbound:$k_max):")
             k_upperbound = try parse(Int64,readline())
             catch e
@@ -171,6 +177,7 @@ function crop_data(Data3D::Array, λ::Vector, filenumber::Integer)
 
         plt.xticks([E_lowerbound, E_upperbound])
         plt.yticks([k_lowerbound, k_upperbound])
+        display(gcf())
         println("Happy with crop? (Answers: yes/y | no/n )")
         answer = readline()
         if answer == "y" || answer == "yes"
@@ -212,7 +219,7 @@ function crop_data(Data3D::Array, λ::Vector, filenumber::Integer)
 end
 
 """
-    crop_data(Data3D, λ, k_bounds, E_bounds)
+    crop_data(Data3D, λ, (k_bounds)::Tuple, (E_bounds)::Tuple)
 
 Crop raw `Array` of PL data, `Data3D`, to region of interest defined by the `k_bounds` and `E_bounds` tuples and then reduces wavelength `Vector`, `λ`, accordingly.
 

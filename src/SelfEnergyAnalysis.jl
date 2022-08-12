@@ -10,7 +10,7 @@ using LsqFit
 using Statistics
 using LaTeXStrings
 using PyPlot
-pygui(true)
+#pygui(true)
 
 include("plotting_presets.jl") # add mirror
 include("process_raw_data.jl") # complete
