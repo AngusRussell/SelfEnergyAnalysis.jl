@@ -242,7 +242,7 @@ function kCropGUI(k::Vector, E::Vector, Eb)
             if kL_lowerbound > 0
                 kL_lowerbound *= -1
             end
-            plt.plot(fill(kL_lowerbound, 1:length(E)), E, color="red", linestyle = "-.")
+            plt.plot(fill(kL_lowerbound, length(E)), E, color="red", linestyle = "-.")
 
             plt.title("Input upper bound for negative k:", weight = "bold")
             println("Input upper bound for negative k:")
@@ -254,7 +254,7 @@ function kCropGUI(k::Vector, E::Vector, Eb)
             if kL_upperbound > 0
                 kL_upperbound *= -1
             end
-            plt.plot(fill(kL_upperbound, 1:length(E)), E, color="red", linestyle = "--")
+            plt.plot(fill(kL_upperbound, length(E)), E, color="red", linestyle = "--")
 
 
             println("Happy with negative k crop? (y/n) or (skip) for mirrored")
@@ -279,7 +279,7 @@ function kCropGUI(k::Vector, E::Vector, Eb)
             skip_factor =1
             continue
         end
-        plt.plot(fill(kR_lowerbound, 1:length(E)), E, color="red", linestyle="-.")
+        plt.plot(fill(kR_lowerbound, length(E)), E, color="red", linestyle="-.")
 
         plt.title("Input upper bound for positive k:", weight = "bold")
         println("Input upper bound for positve k:")
@@ -289,13 +289,13 @@ function kCropGUI(k::Vector, E::Vector, Eb)
             skip_factor =1
             continue
         end
-        plt.plot(fill(kR_upperbound, 1:length(E)), E, color="red", linestyle="--")
+        plt.plot(fill(kR_upperbound, length(E)), E, color="red", linestyle="--")
         println("Happy with positive k crop? (y/n)")
         answerR = readline()
         if answerR == "y" || answerR =="yes" || answerR =="Yes"
             if skip_factor == 1
-                plt.plot(fill(kL_upperbound, 1:length(E)), E, color="red", linestyle = "--")
-                plt.plot(fill(kL_lowerbound, 1:length(E)), E, color="red", linestyle = "-.")
+                plt.plot(fill(kL_upperbound, length(E)), E, color="red", linestyle = "--")
+                plt.plot(fill(kL_lowerbound, length(E)), E, color="red", linestyle = "-.")
             end
             plt.xlim([k[1], k[end]])
             plt.xticks([kL_lowerbound, kL_upperbound, kR_lowerbound, kR_upperbound])

@@ -104,7 +104,7 @@ function crop_data(Data3D::Array, λ::Vector, filenumber::Integer)
         end
 
         if skip_factor == 1
-            plt.plot(fill(E_lowerbound, 1:k_max-1), 1:k_max-1, color = "red")
+            plt.plot(fill(E_lowerbound, k_max-1), 1:k_max-1, color = "red")
             plt.title("Input upper bound for E pixel (between $E_lowerbound:$E_max):", weight = "bold")
             println("Input upper bound for E pixel (between $E_lowerbound:$E_max):")
             E_upperbound = try parse(Int64,readline())
@@ -116,7 +116,7 @@ function crop_data(Data3D::Array, λ::Vector, filenumber::Integer)
                 @error "Bad input: Enter an integer value between $E_lowerbound:$E_max"
                 continue
             end
-            plt.plot(fill(E_upperbound, 1:k_max-1), 1:k_max-1, color = "red")
+            plt.plot(fill(E_upperbound, k_max-1), 1:k_max-1, color = "red")
             # Chance to redo E crop
             println("Are you happy with the Energy crop? (Answers: yes/y | no/n | exit )")
             answer = readline()
@@ -134,8 +134,8 @@ function crop_data(Data3D::Array, λ::Vector, filenumber::Integer)
 
 
         if skip_factor == 2
-            plt.plot(fill(E_lowerbound, 1:k_max-1), 1:k_max-1, color = "red")
-            plt.plot(fill(E_upperbound, 1:k_max-1), 1:k_max-1, color = "red")
+            plt.plot(fill(E_lowerbound, k_max-1), 1:k_max-1, color = "red")
+            plt.plot(fill(E_upperbound, k_max-1), 1:k_max-1, color = "red")
 
             plt.title("Input lower bound for k pixel (between 1:$k_max):", weight = "bold")
             println("Input lower bound for k pixel (between 1:$k_max):")
@@ -152,9 +152,9 @@ function crop_data(Data3D::Array, λ::Vector, filenumber::Integer)
         end
 
         if skip_factor == 3
-            plt.plot(fill(E_lowerbound, 1:k_max-1), 1:k_max-1, color = "red")
-            plt.plot(fill(E_upperbound, 1:k_max-1), 1:k_max-1, color = "red")
-            plt.plot(1:E_max-1, fill(k_lowerbound, 1:E_max-1), color="red")
+            plt.plot(fill(E_lowerbound, k_max-1), 1:k_max-1, color = "red")
+            plt.plot(fill(E_upperbound, k_max-1), 1:k_max-1, color = "red")
+            plt.plot(1:E_max-1, fill(k_lowerbound, E_max-1), color="red")
             plt.title("Input lower bound for k pixel (between $k_lowerbound:$k_max):", weight = "bold")
             println("Input upper bound for k pixel (between $k_lowerbound:$k_max):")
             k_upperbound = try parse(Int64,readline())
@@ -166,7 +166,7 @@ function crop_data(Data3D::Array, λ::Vector, filenumber::Integer)
                 @error "Bad input: Enter an integer value between  $k_lowerbound:$k_max"
                 continue
             end
-            plt.plot(1:E_max-1, fill(k_upperbound, 1:E_max-1), color="red")
+            plt.plot(1:E_max-1, fill(k_upperbound, E_max-1), color="red")
         end
 
         plt.xticks([E_lowerbound, E_upperbound])
