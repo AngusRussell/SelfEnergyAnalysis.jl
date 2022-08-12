@@ -194,10 +194,11 @@ function MDC_protocol_maximum(Data2D::Array)
 end
 
 """
-    MDC_protocol_fitting(Data2D)
+    MDC_protocol_fitting(Data2D, cutoff)
 
 Take 2D `Array` of ``corrected`` PL values and perform MDC analysis, extracting the quadruplete and corresponding errors. Returns DataFrames for for each parameter extracted from `mdc_cut_fitting`.
 
+Optional `cutoff` parameter changes the thershold below which the MDC cuts are not applied. The default value is 10% of the global maximum.
 # Example
 ```jldoctest
 julia> x0_df, FWHM_df, scale_factor_df, maximum_df= MDC_fitting_protocol(BK30[:,:,2])
@@ -278,9 +279,10 @@ julia> x0_df, FWHM_df, scale_factor_df, maximum_df= MDC_fitting_protocol(BK30[:,
 ```
 See also [`mdc_cut_fitting`](@ref), [`correct_data`](@ref), [`pixel_to_k`](@ref).
 """
-function MDC_protocol_fitting(Data2D)
+function MDC_protocol_fitting(Data2D, cutoff::Float64=0.1)
     num_E_pixels = size(Data2D,2)
     maxI = maximum(Data2D)
+
 
     # Initialise Arrays to hold results
     fit_x0 = Array{Float64, 2}(undef, num_E_pixels, 2)
@@ -298,7 +300,7 @@ function MDC_protocol_fitting(Data2D)
     # Loop through E values
     for i = 1:num_E_pixels
             MDC_i = Data2D[:,i]
-        if maximum(MDC_i) < 0.1*maxI # id maximum of cut is less than 10% of max intensity, dont do mdc
+        if maximum(MDC_i) < cutoff*maxI # id maximum of cut is less than 10% of max intensity, dont do mdc
             fit_x0[i,:], fit_FWHM[i,:], fit_scale_factor[i,:], error_x0[i,:], error_FWHM[i,:], error_scale_factor[i,:], fit_maximum[i,:], data_maximum[i,:], data_x0[i,:] = [NaN,NaN], [NaN,NaN], [NaN,NaN], [0,0], [0,0], [0,0], [NaN,NaN], [NaN,NaN], [NaN,NaN]
         else
             fit_x0[i,:], fit_FWHM[i,:], fit_scale_factor[i,:], error_x0[i,:], error_FWHM[i,:], error_scale_factor[i,:], fit_maximum[i,:], data_maximum[i,:], data_x0[i,:] = mdc_cut_fitting(Data2D[:,i], k0)
