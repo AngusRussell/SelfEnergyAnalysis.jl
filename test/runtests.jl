@@ -2,11 +2,22 @@ using SelfEnergyAnalysis
 using Test
 using PyPlot
 pygui(true)
+plt.close("all")
+#BK30_raw, λ30 = load_all("test\\test_data\\raw_data", "csv", 400, 1340, 3);
+#BK30_cropped, λ30 = crop_data(BK30_raw, λ30,(50, 290), (400, 1150));
 
-BK30_raw, λ30 = load_all("test\\test_data\\raw_data", "csv", 400, 1340, 3);
-BK30_cropped, λ30 = crop_data(BK30_raw, λ30, 5);
+BK30, λ30 = correct_BK30("test\\test_data\\raw_data")
 
+Plot_MDC_Cut(BK30[:,:,6], 300)
 
+Eb, kpoints = energy_band_fit(BK30[:,:,8], λ30, true)
+Em, kpoints = energy_band_fit(BK30[:,:,8], λ30, true)
+# Imaginary self-energy
+ImEx, ReKK, LBk, UBk = ImagExtraction(BK30, 8, λ30, -3.8e6, -0.4e6, 0.4e6, 3.8e6);
+# Real self-energy
+ReEx, ImKK, kpoints = RealExtraction(BK30, 8, λ30, LBk, UBk);
+
+SpectralFunction(ReEx, ImEx, Eb, Em, kpoints)
 #SelfEnergyAnalysis.MDC_protocol_fitting(BK30_cropped[:,:,1])
 @testset "SelfEnergyAnalysis.jl" begin
     # Write your tests here.
