@@ -22,7 +22,7 @@ include("lower_polariton_dispsion.jl") # Not done
 include("spectral_function.jl") # Not done
 include("bare-band_algorithm.jl") # Not done
 
-export fig, load_all, crop_data, attenuation_correction_scalar, remove_background, correct_BK30, correct_BK40, MDC, Plot_MDC_Cut, energy_band_fit, energy_band_max, ImagExtraction, RealExtraction, Σ_E
+export fig, load_all, crop_data, attenuation_correction_scalar, remove_background, correct_BK30, correct_BK40, MDC, Plot_MDC_Cut, energy_band_fit, energy_band_max, ImagExtraction, RealExtraction, Σ_E, SpectralFunction
 
 
 end

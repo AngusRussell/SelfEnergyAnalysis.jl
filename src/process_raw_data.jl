@@ -356,11 +356,11 @@ User can look to this function as a guide of how to combine functions `load_all`
 
 # Example
 ```
-julia> BK30, λ30 = correct_BK30();
+julia> BK30, λ30 = correct_BK30("<path_to_raw_data_here>");
 ```
 """
-function correct_BK30()
-    BK30_raw, λ_raw = load_all("BK30KM32d3L/BK30KM32d3L/raw_data", "csv", 400, 1340, 3) #Relative path so have BK30KM32d3L folder in working directory, or alternatively use full puth
+function correct_BK30(Path)
+    BK30_raw, λ_raw = load_all(Path, "csv", 400, 1340, 3) #Relative path so have BK30KM32d3L folder in working directory, or alternatively use full puth
     BK30_cropped, λ_cropped = crop_data(BK30_raw, λ_raw, (42,294), (350,1170))
 
     # Important: calculate scalar correction factors before removing background.
@@ -392,7 +392,7 @@ function correct_BK30()
 end
 
 """
-    correct_BK40()
+    correct_BK40(Path)
 
 Function specific to the SPE-BK40KM32d4T4K-20140304 data set taken recently at the Stanford University. 
 
@@ -401,11 +401,11 @@ User can look to this function as a guide of how to combine functions `load_all`
 
 # Example
 ```
-julia> BK40, λ40 = correct_BK40();
+julia> BK40, λ40 = correct_BK40("<path_to_raw_data_here>");
 ```
 """
-function correct_BK40()
-    BK40_raw, λ_raw = load_all("20220718 FF SPE-BK40KM32d4T4K-20140304", "dat", 400, 1340, false)
+function correct_BK40(Path)
+    BK40_raw, λ_raw = load_all(Path, "dat", 400, 1340, false)
     BK40_cropped, λ_cropped = crop_data(BK40_raw, λ_raw, (1,400), (481,815))
     file_index = [4 3; 12 11; 19 20; 22 23; 25 26; 29 30]
     BK40_corrected = Array{Float64, 3}(undef, size(BK40_cropped,1), size(BK40_cropped,2), size(BK40_cropped,3)-size(file_index,1))
