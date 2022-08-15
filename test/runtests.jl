@@ -8,7 +8,7 @@ plt.close("all")
 
 BK30, λ30 = correct_BK30("test\\test_data\\raw_data")
 
-Plot_MDC_Cut(BK30[:,:,6], 300)
+Plot_MDC_Cut_Max(BK30[:,:,6], 300)
 
 Eb, kpoints = energy_band_fit(BK30[:,:,8], λ30, true)
 Em, kpoints = energy_band_fit(BK30[:,:,8], λ30, true)
@@ -17,8 +17,9 @@ ImEx, ReKK, LBk, UBk = ImagExtraction(BK30, 8, λ30, -3.8e6, -0.4e6, 0.4e6, 3.8e
 # Real self-energy
 ReEx, ImKK, kpoints = RealExtraction(BK30, 8, λ30, LBk, UBk);
 
+Plot_MDC_Cut_Fit(BK30[:,:,6], 300)
 SpectralFunction(ReEx, ImEx, Eb, Em, kpoints)
-#SelfEnergyAnalysis.MDC_protocol_fitting(BK30_cropped[:,:,1])
+
 @testset "SelfEnergyAnalysis.jl" begin
     # Write your tests here.
     a = [1, NaN, 2, NaN, 3]
