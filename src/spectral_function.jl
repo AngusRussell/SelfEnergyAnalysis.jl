@@ -1,11 +1,12 @@
-"""
+
+@doc doc"""
     SpectralFunction(RealΣ, ImagΣ, Eb, Em, kpoints)
 
 Recreates the Spectral function:
 
-  ``A^+(k,\\omega) = -\frac{1}{\\pi}\\frac{\\mathrm{Im}[\\Sigma(k,\\omega)]}{(\\omega-\\varepsilon_k -\\mathrm{Re}[\\Sigma(k,\\omega)])^2+(\\mathrm{Im}[\\Sigma(k,\\omega)])^2}``
+  ``A^+(k,\omega) = -\frac{1}{\pi}\frac{\mathrm{Im}[\Sigma(k,\omega)]}{(\omega-\varepsilon_k -\mathrm{Re}[\Sigma(k,\omega)])^2+(\mathrm{Im}[\Sigma(k,\omega)])^2}``
 
-For a given pump-power using the real self-energy component, `RealΣ`, the imaginary self-energy component, `ImagΣ`, the bare-band, `Eb` and the energy disperison `Em`.
+For a given pump-power usisng the real self-energy component, `RealΣ`, the imaginary self-energy component, `ImagΣ`, the bare-band, `Eb` and the energy disperison `Em`.
 
 # Example
 ```

@@ -8,7 +8,7 @@ Path of folder specified in `File_path` as a `String` with "`/`" between folders
 `header` argument of function skipps the header positions in the CSV. If there are no headers, enter `false`.
 
 # Example
-```
+```julia
 julia> BK30, λ30 = load_all("BK30KM32d3L/BK30KM32d3L/raw_data", "csv", 400, 1340, 3);
 
 julia> BK40, λ40 = load_all("20220718 FF SPE-BK40KM32d4T4K-20140304", "dat", 400, 1340, false)
@@ -78,7 +78,7 @@ E tuple: (580, 815)
 See also [`load_all`](@ref)
 """
 function crop_data(Data3D::Array, λ::Vector, filenumber::Integer)
-    ion()
+    
     not_cropped = true
     E_lowerbound, E_upperbound, k_lowerbound, k_upperbound = 0, 0, 0, 0;
     skip_factor = 0
@@ -322,7 +322,7 @@ function attenuation_correction_scalar(Data3D::Array, saturated_filenumber::Int,
 end
 
 """
-    remove_background(Data3D)
+    remove_background(Data3D, Background)
 
 Takes `Array` of cropped PL data and sets all intensity values bellow user defined `Background` value to zero.
 
@@ -360,7 +360,7 @@ julia> BK30, λ30 = correct_BK30("<path_to_raw_data_here>");
 ```
 """
 function correct_BK30(Path)
-    BK30_raw, λ_raw = load_all(Path, "csv", 400, 1340, 3) #Relative path so have BK30KM32d3L folder in working directory, or alternatively use full puth
+    BK30_raw, λ_raw = load_all(Path, "csv", 400, 1340, 3) #Relative path so have BK30KM32d3L folder in working directory, or alternatively use full path 
     BK30_cropped, λ_cropped = crop_data(BK30_raw, λ_raw, (42,294), (350,1170))
 
     # Important: calculate scalar correction factors before removing background.

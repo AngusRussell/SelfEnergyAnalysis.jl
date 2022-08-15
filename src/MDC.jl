@@ -1,9 +1,16 @@
-"""
-    mdc_cut_fitting(Data1D, k0)
+@doc doc"""
+        mdc_cut_fitting(Data1D, k0)
 
 Takes 1D `Array` from an MDC slice and the k=0 pixel position as input arguments. Returns: pixel correspond to km, the FWHM, the scalling factor,  the % error in km, FWHM, and scalling factor, max intensity from the fit, maximum intensity from the data.
 
-Works by spltting the 1D array in half and fitting a Lorentzian to each half. The while loop iterates over FWHM guesses until error is bellow 10%. Outputs two-element vectors for [left, right].
+Works by spltting the 1D array in half and fitting a Lorentzian
+
+
+```math 
+L(x) = \frac{1}{\pi} \frac{\frac{1}{2}\Gamma}{(x-x_\mathrm{0})^2 +(\frac{1}{2} \Gamma)^2}
+```
+
+to each half. The while loop iterates over FWHM guesses until error is bellow 10%. Outputs two-element vectors for [left, right].
 
 # Example
 ```
@@ -15,7 +22,7 @@ julia> km = a[1]
   54.41649841536545
  196.0629539893839
 ```
-See also [`MDC_extraction`](@ref), [`pixel_to_k`](@ref).
+See also [`MDC_protocol_fitting`](@ref), [`pixel_to_k`](@ref).
 """
 function mdc_cut_fitting(Data1D::Array, k0::Number)
 
@@ -96,6 +103,49 @@ function mdc_cut_fitting(Data1D::Array, k0::Number)
 end
 
 """
+    Plot_MDC_Cut_Fit(Data2D::Array, E_index::Int)
+
+    Plots the results of [`edc_cut_fitting`](@ref) for a given `E_index` in a 2D `Array` of PL data
+
+# Example
+```julia
+Plot_MDC_Cut_Fit(BK30[:,:,6], 300)
+```
+"""
+function Plot_MDC_Cut_Fit(Data2D::Array, E_index::Int)
+
+    k , k0 = pixel_to_k(Data2D)
+    int(x) = floor(Int, x)  # defines a function that converts float to int
+
+    Data1D = Data2D[: ,E_index]
+    size = length(Data1D)     # Length of the 1D array being analyzed
+    HW = k0                 # Half of the length of the array
+
+    xL = collect(1:int(HW))     # Defines x vector for the LHS 1:half way
+    xR = collect(int(HW):size)  # Defines x vector for the RHS half way:end
+
+    yL = Data1D[1:int(HW)]        # Cuts the data in half LHS
+    yR = Data1D[int(HW):size]     # Cuts the data in half RHS
+
+
+
+    L(x, p) =  (1/pi .* (0.5.*p[1])./((x.-p[2]).^2 .+ (0.5.*p[1]).^2)).*p[3]  # Lorentzian function
+    
+    fit_x0, fit_FWHM, fit_scale_factor, error_x0, error_FWHM, error_scale_factor, fit_maximum, data_maximum, data_x0 = mdc_cut_fitting(Data1D, k0)
+
+    fig()
+    plt.scatter(xL,yL, s=10, color="blue")
+    plt.plot(xL, L(xL,[fit_FWHM[1], fit_x0[1], fit_scale_factor[1]]), color = "red")
+    plt.scatter(xR, yR, s=10, color="purple")
+    plt.plot(xR, L(xR, [fit_FWHM[2], fit_x0[2], fit_scale_factor[2]]), color = "darkred")
+    plt.legend(["Lorentzian fit : Left", "Lorentzian fit : Right", "Data: left", "Data: Right"])
+    plt.xlabel(L"k~(\mathrm{pixels})")
+    plt.ylabel(L"I~(\mathrm{a.u.})")
+    plt.ylim([-1e3, 1.1*maximum(fit_maximum)])
+    plt.xlim([xL[1], xR[end]])
+end
+
+"""
     mdc_cut_maximum(Data1D, k0)
 
 Takes 1D `Array` from an MDC slice and the k=0 pixel position. 
@@ -111,7 +161,7 @@ are not well described by a Lorentzian function. If they are, one should intead 
 julia> km, k1, k2 = mdc_cut_maximum(BK40[:,200, 5], 200)
 ([154, 250], [158.26734665230455, 245.55269763749718], [150.9186355501067, 251.4735060057741])
 ```
-See also [`mdc_cut_fitting`](@ref), [`MDC_extraction`](@ref), [`pixel_to_k`](@ref).
+See also [`mdc_cut_fitting`](@ref), [`MDC_protocol_maximum`](@ref), [`pixel_to_k`](@ref).
 """
 function mdc_cut_maximum(Data1D::Array, k0::Number)
 
@@ -196,7 +246,7 @@ end
 """
     MDC_protocol_fitting(Data2D, cutoff)
 
-Take 2D `Array` of ``corrected`` PL values and perform MDC analysis, extracting the quadruplete and corresponding errors. Returns DataFrames for for each parameter extracted from `mdc_cut_fitting`.
+Take 2D `Array` of corrected PL values and perform MDC analysis, extracting the quadruplete and corresponding errors. Returns DataFrames for for each parameter extracted from `mdc_cut_fitting`.
 
 Optional `cutoff` parameter changes the thershold below which the MDC cuts are not applied. The default value is 10% of the global maximum.
 # Example
@@ -277,7 +327,7 @@ julia> x0_df, FWHM_df, scale_factor_df, maximum_df= MDC_fitting_protocol(BK30[:,
                807 rows omitted)
 
 ```
-See also [`mdc_cut_fitting`](@ref), [`correct_data`](@ref), [`pixel_to_k`](@ref).
+See also [`mdc_cut_fitting`](@ref), [`correct_BK30`](@ref), [`pixel_to_k`](@ref).
 """
 function MDC_protocol_fitting(Data2D, cutoff::Float64=0.1)
     num_E_pixels = size(Data2D,2)
@@ -301,7 +351,7 @@ function MDC_protocol_fitting(Data2D, cutoff::Float64=0.1)
     for i = 1:num_E_pixels
             MDC_i = Data2D[:,i]
         if maximum(MDC_i) < cutoff*maxI # id maximum of cut is less than 10% of max intensity, dont do mdc
-            fit_x0[i,:], fit_FWHM[i,:], fit_scale_factor[i,:], error_x0[i,:], error_FWHM[i,:], error_scale_factor[i,:], fit_maximum[i,:], data_maximum[i,:], data_x0[i,:] = [NaN,NaN], [NaN,NaN], [NaN,NaN], [0,0], [0,0], [0,0], [NaN,NaN], [NaN,NaN], [NaN,NaN]
+                fit_x0[i,:], fit_FWHM[i,:], fit_scale_factor[i,:], error_x0[i,:], error_FWHM[i,:], error_scale_factor[i,:], fit_maximum[i,:], data_maximum[i,:], data_x0[i,:] = [NaN,NaN], [NaN,NaN], [NaN,NaN], [0,0], [0,0], [0,0], [NaN,NaN], [NaN,NaN], [NaN,NaN]
         else
             fit_x0[i,:], fit_FWHM[i,:], fit_scale_factor[i,:], error_x0[i,:], error_FWHM[i,:], error_scale_factor[i,:], fit_maximum[i,:], data_maximum[i,:], data_x0[i,:] = mdc_cut_fitting(Data2D[:,i], k0)
         
@@ -314,8 +364,7 @@ function MDC_protocol_fitting(Data2D, cutoff::Float64=0.1)
     scale_factor_df = DataFrame("Left SF"=>fit_scale_factor[:,1], "Right SF"=>fit_scale_factor[end:-1:1,2], "Error Left" => error_scale_factor[:,1], "Error Right" => error_scale_factor[end:-1:1,2])
     maximum_df = DataFrame("Left Max I"=>fit_maximum[:,1], "Right Max I"=>fit_maximum[:,2])
     return x0_df, FWHM_df, scale_factor_df, maximum_df
-end 
-
+end
 
 """
     MDC(Data2D, λ, plot_true_or_false)
@@ -391,18 +440,18 @@ function MDC(Data2D, λ, plot_true_or_false::Bool)
 end
 
 """
-Plot_MDC_Cut(Data2D::Array, E_index::Int)
+Plot_MDC_Cut_Max(Data2D::Array, E_index::Int)
 
 Takes 2D PL data `Array` and plots the MDC cut for a given energy pixel `E_index`.
 
 # Example
 ```
-julia> Plot_MDC_Cut(BK30[:,:,5], 200)
+julia> Plot_MDC_Cut_Max(BK30[:,:,5], 200)
 [210.67258734120222, 215.9525458388472]
 PyObject Text(185.77777777777777, 0.5, 'I~(\\mathrm{a.u.})')
 ```
 """
-function Plot_MDC_Cut(Data2D::Array, E_index::Int)
+function Plot_MDC_Cut_Max(Data2D::Array, E_index::Int)
     k , k0 = pixel_to_k(Data2D)
     int(x) = floor(Int, x)  # defines a function that converts float to int
 

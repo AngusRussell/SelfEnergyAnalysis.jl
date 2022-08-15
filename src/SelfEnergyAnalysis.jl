@@ -10,10 +10,10 @@ using LsqFit    # https://github.com/JuliaNLSolvers/LsqFit.jl
 using Statistics    # https://github.com/JuliaStats/Statistics.jl
 using LaTeXStrings  # https://github.com/stevengj/LaTeXStrings.jl
 using PyPlot    # https://github.com/JuliaPy/PyPlot.jl
-
+using Markdown
 
 include("plotting_presets.jl") # add mirror
-include("process_raw_data.jl") # complete
+include("process_raw_data.jl") # completeS
 include("useful_manipulations.jl") # complete
 include("MDC.jl") # complete
 include("EDC.jl") # complete
@@ -22,7 +22,7 @@ include("lower_polariton_dispsion.jl") # Not done
 include("spectral_function.jl") # Not done
 include("bare-band_algorithm.jl") # Not done
 
-export fig, load_all, crop_data, attenuation_correction_scalar, remove_background, correct_BK30, correct_BK40, MDC, Plot_MDC_Cut, energy_band_fit, energy_band_max, ImagExtraction, RealExtraction, Σ_E, SpectralFunction
+export fig, load_all, crop_data, attenuation_correction_scalar, remove_background, correct_BK30, correct_BK40, MDC, Plot_MDC_Cut_Max, Plot_MDC_Cut_Fit, energy_band_fit, energy_band_max, ImagExtraction, RealExtraction, Σ_E, SpectralFunction
 
 
 end
