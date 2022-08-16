@@ -32,18 +32,19 @@ See the [Library](@ref Library) for the complete list of documented functions an
 ## Tutorial Outline
 
 ```@contents
-Pages = ["tut/process.md",
-         "tut/mdc.md",
-         "tut/edc.md",
-         "tut/self.md",
-         "tut/spec.md"
+Pages = ["tut\\process.md",
+         "tut\\mdc.md",
+         "tut\\edc.md",
+         "tut\\self.md",
+         "tut\\spec.md"
          ,]
 Depth = 1
 ```
 ## [Library](@id Library)
 
 ```@contents
-Pages = ["Lib/public.md"]
+Pages = ["Lib\\public.md", "Lib\\internals.md",]
+Depth = 1
 ```
 
 ### [Index](@id main-index)

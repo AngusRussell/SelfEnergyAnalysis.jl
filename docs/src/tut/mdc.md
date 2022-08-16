@@ -3,7 +3,10 @@
 ```@meta
 CurrentModule = SelfEnergyAnalysis
 ```
-The momentum distribution curve protocol has two different methods that can be used. There is the [`SelfEnergyAnalysis.MDC_protocol_fitting()`](@ref) and [`SelfEnergyAnalysis.MDC_protocol_maximum()`](@ref) which both extract values from the data but in different ways.
+
+The momentum distribution cuve (MDC) takes a 1D cut for a given value of energy ``E``, resulting in a distribution of intensity as a function of momentum, ``I(k)``.
+
+The MDC protocol has two different methods that can be used. There is the [`SelfEnergyAnalysis.MDC_protocol_fitting()`](@ref) and [`SelfEnergyAnalysis.MDC_protocol_maximum()`](@ref) which both extract values from the data but in different ways.
 
 ## Fitting Protocol
 
@@ -27,7 +30,10 @@ Plot_MDC_Cut_Fit(BK30[:,:,6], 300)
 
 ```
 
-To obtain the full set of MDC plots run the [`MDC()`](@ref) function.
+To obtain the full set of MDC plots run the [`MDC()`](@ref) function, passing `true` in the third argument.
+```julia
+kL, kR, EmL, EmR, HWHM_L, HWHM_R = MDC(BK30[:,:,8], λ30, true)
+```
 
 ## Maximum protocol
 

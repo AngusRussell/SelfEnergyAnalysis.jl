@@ -1,3 +1,5 @@
+# Internal Functions
+
 ```@meta
 CurrentModule = SelfEnergyAnalysis
 ```
