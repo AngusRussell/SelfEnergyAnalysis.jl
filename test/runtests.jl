@@ -10,7 +10,7 @@ BK30, λ30 = correct_BK30("test\\test_data\\raw_data")
 
 Plot_MDC_Cut_Max(BK30[:,:,6], 300)
 
-Eb, kpoints = energy_band_fit(BK30[:,:,8], λ30, true)
+Eb, kpoints = energy_band_fit(BK30[:,:,1], λ30, true)
 Em, kpoints = energy_band_fit(BK30[:,:,8], λ30, true)
 # Imaginary self-energy
 ImEx, ReKK, LBk, UBk = ImagExtraction(BK30, 8, λ30, -3.8e6, -0.4e6, 0.4e6, 3.8e6);

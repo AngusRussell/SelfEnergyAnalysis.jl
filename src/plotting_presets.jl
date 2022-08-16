@@ -1,7 +1,7 @@
 """
     fig()
 
-Creates ``Matplotlib figure`` object with a 6x6 size and custom formating. Quick way of keeping figure layout consistent
+Creates [Matplotlib figure](https://matplotlib.org/) object with a 6x6 size and custom formating. Quick way of keeping figure layout consistent
 
 # Example
 ```
@@ -38,7 +38,7 @@ end
 """
     fig(width::Float64, height::Float64)
 
-Creates ``Matplotlib figure`` object with a 6x6 size and custom formating. Quick way of keeping figure layout consistent
+Creates [Matplotlib figure](https://matplotlib.org/) object with a 6x6 size and custom formating. Quick way of keeping figure layout consistent
 
 # Example
 ```
