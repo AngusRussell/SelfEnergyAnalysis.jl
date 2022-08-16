@@ -8,7 +8,7 @@ CurrentModule = SelfEnergyAnalysis
 
 ## Introduction 
 
-This package allows one to apply the self-energy analysis commonly used in condensed matter ARPES experiments to Exciton-Polariton photoluminescence (PL) data.
+This package allows you to apply the self-energy analysis commonly used in condensed matter ARPES experiments to Exciton-Polariton photoluminescence (PL) data.
 
 ## Package Features 
 

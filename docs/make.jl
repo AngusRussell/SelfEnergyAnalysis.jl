@@ -28,5 +28,6 @@ makedocs(;
         "Internals" => "Lib/internals.md"
           
     ],
+    "Further Reading" => "Lib/reading.md",
     ],
 )
