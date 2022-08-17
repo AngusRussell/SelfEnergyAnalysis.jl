@@ -6,7 +6,7 @@ This package allows you to apply the self-energy analysis commonly used in conde
 
 ## Instalation Guide
 
-Please make sure you have the [Julia programming language](https://julialang.org/downloads/) and (git)[https://git-scm.com/downloads] installed. It is also recomended to use [Visual Studio Code](https://code.visualstudio.com/) with its [Julia extenstion](https://github.com/julia-vscode/julia-vscode#installing-juliavs-codevs-code-julia-extension).
+Please make sure you have the [Julia programming language](https://julialang.org/downloads/) and [git](https://git-scm.com/downloads) installed. It is also recomended to use [Visual Studio Code](https://code.visualstudio.com/) with its [Julia extenstion](https://github.com/julia-vscode/julia-vscode#installing-juliavs-codevs-code-julia-extension).
 
 To start, create or select a directory to work in and open the git terminal in this directory. Then clone the GitLab repository into your folder by entering:
 
