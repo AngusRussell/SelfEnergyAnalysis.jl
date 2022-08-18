@@ -21,6 +21,11 @@ In the Julia REPL enter `]` to open the package manager. Now enter
 ```
 add SelfEnergyAnalysis.jl
 ```
+!!! note
+    If this throws an error try:
+    ```
+    add ./SelfEnergyAnalysis.jl
+    ```
 This should complete the installation of the package. You may find it useful to add the following packages as as well 
 ```
 add PyPlot
