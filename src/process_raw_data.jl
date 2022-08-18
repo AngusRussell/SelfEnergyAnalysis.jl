@@ -520,3 +520,20 @@ function λ_to_E(wavelength)
     end
     return E
 end
+
+"""     plot_all(Data3D)
+
+Plots all of the loaded raw data. This is useful for identifying the file
+to use in the interactive cropping process, i.e. the third argument in [`crop_data`](@ref).
+
+# Example 
+```julia
+julia> plot_all(BK31_raw)
+```
+"""
+function plot_all(Data3D)
+    for i = 1:size(Data3D, 3)        
+        fig()
+        plt.contourf(Data3D[:,:,i])
+    end
+end
