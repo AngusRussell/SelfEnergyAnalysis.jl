@@ -334,21 +334,27 @@ function energy_band_max(Data2D::Array, λ, plot_true_or_false::Bool)
 end
 
 """
-    Plot_all_bands(Data3D, λ, protocol::String)
+    Plot_all_bands(Data3D, λ, protocol::String, last_index)
 
 Takes a 3D `Array` of PL data and plots all of the energy bands on one figure. This can be useful to chose what pump-powers to apply the self-energy analysis to.
 
-The argument `protocol` determines which EDC protocol is used; [`energy_band_max`](@ref) or [`energy_band_fit`](@ref)
+The argument `protocol` determines which EDC protocol is used; [`energy_band_max`](@ref) or [`energy_band_fit`](@ref). 
+
+The optional `last_index` argument allows you to pick up to which pump-power is plotted
 
 # Example
 ```julia
 julia> Plot_all_bands(BK30, λ30, "max")
 ```
 # Example
-julia> Plot_all_bands(BK30, λ30, "fit")
+julia> Plot_all_bands(BK30, λ30, "fit", 5)
 PyObject <matplotlib.legend.Legend object at 0x0000000097CCD5E0>
 """
-function Plot_all_bands(Data3D, λ, protocol::String)
+function Plot_all_bands(Data3D, λ, protocol::String, last_index::Number=0)
+    if last_index == 0
+        last_index = size(Data3D,3)
+    end
+
     if protocol == "max" || protocol == "maximum"
         Eb, kpoints = energy_band_max(Data3D[:,:,1], λ, false)
         fig(8,8)
@@ -356,7 +362,8 @@ function Plot_all_bands(Data3D, λ, protocol::String)
         plt.xlabel(L"k~(\mathrm{m^{-1}})")
         plt.ylabel(L"E~(\mathrm{eV})")
         Legend = ["Pump-power: 1"]
-        for i = 2:size(Data3D,3)
+        a = size(Data3D,3) - last_index 
+        for i = 2:size(Data3D,3)-a
             Em, kpoints = energy_band_max(Data3D[:,:,i], λ, false)
             plt.plot(kpoints, Em(kpoints))
             append!(Legend, ["Pump-Power: $i"])
@@ -370,7 +377,8 @@ function Plot_all_bands(Data3D, λ, protocol::String)
         plt.xlabel(L"k~(\mathrm{m^{-1}})")
         plt.ylabel(L"E~(\mathrm{eV})")
         Legend = ["Pump-power: 1"]
-        for i = 2:size(Data3D,3)
+        a = size(Data3D,3) - last_index 
+        for i = 2:size(Data3D,3)-a
             Em, kpoints = energy_band_fit(Data3D[:,:,i], λ, false)
             plt.plot(kpoints, Em(kpoints))
             append!(Legend, ["Pump-Power: $i"])
