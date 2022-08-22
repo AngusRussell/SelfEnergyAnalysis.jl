@@ -481,7 +481,7 @@ end
 """
     λ_to_E(wavelength)
 
-Converts `Vector` containing wavelength values to 'Vector' containing energy values in units of eV.
+Converts `Vector` containing wavelength values to `Vector` containing energy values in units of eV.
 
 # Example
 ```
@@ -536,4 +536,84 @@ function plot_all(Data3D)
         fig()
         plt.contourf(Data3D[:,:,i])
     end
+end
+
+"""
+    MirrorData(Data2D)
+
+Takes a 2D array of PL data and mirrors around the ``k=0`` point determined by [`pixel_to_k`](@ref). 
+Prints the ``k=0`` pixel and returns the mirrored LHS of the original data and the mirrored RHS of the original data.
+
+# Example
+```julia
+julia> BK31, λ31 = correct_BK31();
+
+julia> MirrorData(BK31[:,:,1]);
+203
+```
+"""
+function MirrorData(Data2D)
+    k, k0 = pixel_to_k(Data2D)
+    centre = int(k0)
+    println(centre)
+    fig()
+    plt.contourf(Data2D)
+    plt.plot(1:size(Data2D,2)-1, fill(centre, size(Data2D,2)-1), linestyle="--", color="red")
+    plt.yticks([centre])
+
+    mirrored_left = Array{Float64, 2}(undef, centre *2, size(Data2D,2))
+    mirrored_right = Array{Float64, 2}(undef, (size(Data2D,1)-centre) * 2, size(Data2D,2))
+    a = (size(Data2D,1)-centre)
+
+    # Mirror Left
+    mirrored_left[1:centre,:] = Data2D[1:centre,:]
+    mirrored_left[end:-1:centre+1,:] = Data2D[1:centre,:]
+
+    mirrored_right[1:a+1, :] = Data2D[end:-1:centre,:]
+    mirrored_right[a:end,:] = Data2D[centre:end,:]
+    
+    fig()
+    plt.contourf(mirrored_left)
+    plt.plot(1:size(mirrored_left,2)-1, fill(centre, size(mirrored_left,2)-1), linestyle="--", color="red")
+
+
+    fig()
+    plt.contourf(mirrored_right)
+    plt.plot(1:size(mirrored_right,2)-1, fill(a, size(mirrored_right,2)-1), linestyle="--", color="red")
+        
+    return mirrored_left, mirrored_right
+end
+
+"""
+    check_symmetry(Data2D, wav)
+
+Takes a 2D array of PL data, `Data2D`, and a corresponding wavelength `Vector`, `wav`. It then uses the [`MirrorData`](@ref) function to mirror the data around the ``k=0`` pixel
+and then applys the [`energy_band_max`](@ref) to the original, LHS mirrored and RHS mirrored data sets. 
+
+Returns a plot of the three energy bands plotted together. This allows for a visual assessment of the symmmetry around the ``k=0`` pixel.
+
+# Example 
+```julia
+julia> check_symmetry(BK30[:,:,1], λ30)
+203
+PyObject <matplotlib.legend.Legend object at 0x000000008C7642B0>
+```
+"""
+function check_symmetry(Data2D, wav)
+    mirrored_left, mirrored_right = MirrorData(Data2D)
+
+    Em, kpoints = energy_band_max(Data2D, wav, false)
+
+    E_mleft, k_mleft = energy_band_max(mirrored_left, wav, false)
+
+    E_mright, k_mright = energy_band_max(mirrored_right, wav, false)
+
+    fig()
+    plt.plot(k_mright, Em(k_mright))
+    plt.plot(k_mright, E_mleft(k_mright))
+    plt.plot(k_mright, E_mright(k_mright))
+    plt.xlabel(L"k~(\mathrm{m^{-1}})")
+    plt.ylabel(L"E~(\mathrm{eV})")
+    plt.legend(["EDC of Data", "LHS mirrored", "RHS mirorred"])
+
 end
