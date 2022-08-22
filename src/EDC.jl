@@ -332,3 +332,49 @@ function energy_band_max(Data2D::Array, λ, plot_true_or_false::Bool)
     Em = Spline1D(kpoints, Em)
     return Em, kpoints
 end
+
+"""
+    Plot_all_bands(Data3D, λ, protocol::String)
+
+Takes a 3D `Array` of PL data and plots all of the energy bands on one figure. This can be useful to chose what pump-powers to apply the self-energy analysis to.
+
+The argument `protocol` determines which EDC protocol is used; [`energy_band_max`](@ref) or [`energy_band_fit`](@ref)
+
+# Example
+```julia
+julia> Plot_all_bands(BK30, λ30, "max")
+```
+# Example
+julia> Plot_all_bands(BK30, λ30, "fit")
+PyObject <matplotlib.legend.Legend object at 0x0000000097CCD5E0>
+"""
+function Plot_all_bands(Data3D, λ, protocol::String)
+    if protocol == "max" || protocol == "maximum"
+        Eb, kpoints = energy_band_max(Data3D[:,:,1], λ, false)
+        fig(8,8)
+        plt.plot(kpoints, Eb(kpoints))
+        plt.xlabel(L"k~(\mathrm{m^{-1}})")
+        plt.ylabel(L"E~(\mathrm{eV})")
+        Legend = ["Pump-power: 1"]
+        for i = 2:size(Data3D,3)
+            Em, kpoints = energy_band_max(Data3D[:,:,i], λ, false)
+            plt.plot(kpoints, Em(kpoints))
+            append!(Legend, ["Pump-Power: $i"])
+        end
+        plt.legend(Legend)
+    end
+    if protocol == "fit" || protocol == "fitting"
+        Eb, kpoints = energy_band_fit(Data3D[:,:,1], λ, false)
+        fig(8,8)
+        plt.plot(kpoints, Eb(kpoints))
+        plt.xlabel(L"k~(\mathrm{m^{-1}})")
+        plt.ylabel(L"E~(\mathrm{eV})")
+        Legend = ["Pump-power: 1"]
+        for i = 2:size(Data3D,3)
+            Em, kpoints = energy_band_fit(Data3D[:,:,i], λ, false)
+            plt.plot(kpoints, Em(kpoints))
+            append!(Legend, ["Pump-Power: $i"])
+        end
+        plt.legend(Legend)
+    end
+end
