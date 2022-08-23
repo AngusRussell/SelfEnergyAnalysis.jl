@@ -51,3 +51,42 @@ To obtain a full set of plots for this analysis we can input these results into 
 ```julia
 Σ_E(BK30, λ30, ReEx, ImEx, ReKK, ImKK, kpoints)
 ```
+
+### Saving our results
+To save our results we can use the [CSV](https://csv.juliadata.org/stable/) and [DataFrames](https://dataframes.juliadata.org/stable/) packages. These packages can be installed with the Julia package manager. From the Julia REPL, type `]` to enter the Pkg REPL mode and run:
+
+```
+pkg> add CSV, DataFrames
+```
+
+Once the packages are installed, add them to our working evironment via the REPL:
+```@repl
+using CSV, DataFrames
+```
+or by simply addding  `using CSV, DataFrames`  to the top of the file you are working in.
+
+#### Example
+To save our real extracted self-energy term `ReEx` we can either save it to its own CSV file or create a DataFrame and combine it with other relevant values.
+To save on its own:
+```julia
+CSV.write("ReEx.csv", DataFrame([ReEx], :auto), header=false)
+```
+The first argument defines the file name, the second basically creates a simple data frame containing our values and the third saves with no headers in the file.
+
+To save a collection of values in one CSV file we must first create a DataFrame:
+```julia
+P8_SelfEnergy_df = DataFrame("ReEx"=>ReEx, "ImEx"=>ImEx, "ReKK"=>ReKK, "ImKK"=>ImKK, "kpoints"=>kpoints)
+```
+We can now save our `P8_SelfEnergy_df` data frame as a CSV file in a similar fashion as before.
+```julia
+CSV.write("PumpPower_SE_analysis.csv", P8_SelfEnergy_df)
+```
+To read our data from the file we can use:
+```julia
+P8_SelfEnergy_df = CSV.read("PumpPower_SE_analysis.csv", DataFrame)
+```
+Then to convert one of our data colunms into a more usable `Vector`:
+```julia
+ReEx = P8_SelfEnergy_df."ReEx"
+```
+This is a basic walkthrough for the [CSV](https://csv.juliadata.org/stable/) and [DataFrames](https://dataframes.juliadata.org/stable/) packages. For more information check out the documentation that I have linked here.

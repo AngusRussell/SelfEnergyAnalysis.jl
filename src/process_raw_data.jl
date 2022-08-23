@@ -521,17 +521,17 @@ function λ_to_E(wavelength)
     return E
 end
 
-"""     plot_all(Data3D)
+"""     Plot_all(Data3D)
 
 Plots all of the loaded raw data. This is useful for identifying the file
 to use in the interactive cropping process, i.e. the third argument in [`crop_data`](@ref).
 
 # Example 
 ```julia
-julia> plot_all(BK31_raw)
+julia> Plot_all(BK31_raw)
 ```
 """
-function plot_all(Data3D)
+function Plot_all(Data3D)
     for i = 1:size(Data3D, 3)        
         fig()
         plt.contourf(Data3D[:,:,i])
@@ -609,9 +609,9 @@ function check_symmetry(Data2D, wav)
     E_mright, k_mright = energy_band_max(mirrored_right, wav, false)
 
     fig()
-    plt.plot(k_mright, Em(k_mright))
-    plt.plot(k_mright, E_mleft(k_mright))
-    plt.plot(k_mright, E_mright(k_mright))
+    plt.scatter(k_mright, Em(k_mright), s=10)
+    plt.scatter(k_mright, E_mleft(k_mright), s=10)
+    plt.scatter(k_mright, E_mright(k_mright), s=10)
     plt.xlabel(L"k~(\mathrm{m^{-1}})")
     plt.ylabel(L"E~(\mathrm{eV})")
     plt.legend(["EDC of Data", "LHS mirrored", "RHS mirorred"])

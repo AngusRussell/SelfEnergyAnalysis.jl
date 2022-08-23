@@ -30,6 +30,18 @@ For .dat file with no headers:
 ```julia
 BK40, λ40 = load_all("20220718 FF SPE-BK40KM32d4T4K-20140304", "dat", 400, 1340, false)
 ```
+## Initial plotting
+It can be useful to plot all the raw data and look through to see if there are any artifacts in your data you want to crop out. We can do this using the [`Plot_all()`](@ref) function:
+```julia
+Plot_all(BK30)
+```
+Look through the plots and then you can choose a problem dataset for the next stage.
+
+!!! hint
+    If the plots do not display then run: 
+    ```julia
+    pygui(true)
+    ``` 
 
 ## Cropping the data
 
@@ -44,8 +56,21 @@ This first method will open an interactive cropping process where you will be ab
 The second method allows you to skip the interactive process in method one by having an input for values you decided to crop at:
 
 ```julia 
-BK30, λ = load_all("BK30KM32d3L/BK30KM32d3L/raw_data", 400, 1340, 3);
+BK30_cropped, λ_cropped = crop_data(BK30, λ, (42,294), (350,1170));
 ```
+
+## Checking symmetry
+If you would like to check the symmetry of your measured data, one can use the [`check_symmetry()`](@ref). It is probably a good idea to use the lowest pump-power to compare:
+```julia
+check_symmetry(BK30_cropped[:,:,1], λ_cropped)
+```
+This produces four plots
+1) A plot of the `BK30_cropped[:,:,1]` data with a red-line indicating the $k=0$ pixel position.
+2) A plot of the left-hand-side (LHS) of `BK30_cropped[:,:,1]` relative to the $k=0$ pixel, mirrored on to the right-hand-side (RHS), with red line indicating $k=0$ pixel position.
+3) A plot of the RHS mirrored on to the left like 2.
+4) A scatter plot of the [`energy_band_max()`][@ref] process applied to the three plots above. 
+
+This enables one to look at the difference between LHS and RHS.
 
 ## Correcting the data
 
