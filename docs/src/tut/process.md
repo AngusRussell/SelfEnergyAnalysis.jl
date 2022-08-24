@@ -58,20 +58,6 @@ The second method allows you to skip the interactive process in method one by ha
 ```julia 
 BK30_cropped, λ_cropped = crop_data(BK30, λ, (42,294), (350,1170));
 ```
-
-## Checking symmetry
-If you would like to check the symmetry of your measured data, one can use the [`check_symmetry()`](@ref). It is probably a good idea to use the lowest pump-power to compare:
-```julia
-check_symmetry(BK30_cropped[:,:,1], λ_cropped)
-```
-This produces four plots
-1) A plot of the `BK30_cropped[:,:,1]` data with a red-line indicating the $k=0$ pixel position.
-2) A plot of the left-hand-side (LHS) of `BK30_cropped[:,:,1]` relative to the $k=0$ pixel, mirrored on to the right-hand-side (RHS), with red line indicating $k=0$ pixel position.
-3) A plot of the RHS mirrored on to the left like 2.
-4) A scatter plot of the [`energy_band_max()`][@ref] process applied to the three plots above. 
-
-This enables one to look at the difference between LHS and RHS.
-
 ## Correcting the data
 
 The raw data needs to be corrected for changes in attenuation. As the intensity of light emitted from the sample increases, the light needs to be attenuated in order to protect the detector and avoid saturation. In your raw data folder, look for filenames that indicate the same laser pump-power but in different files e.g. 
@@ -158,3 +144,27 @@ function correct_BK40(Path)
     return BK40_corrected,λ_cropped
 end
 ```
+## Checking symmetry
+If you would like to check the symmetry of your measured data, one can use the [`check_symmetry()`](@ref). It is probably a good idea to use the lowest pump-power to compare:
+```julia
+check_symmetry(BK30_cropped[:,:,1], λ_cropped)
+```
+This produces four plots
+1) A plot of the `BK30_cropped[:,:,1]` data with a red-line indicating the $k=0$ pixel position.
+2) A plot of the left-hand-side (LHS) of `BK30_cropped[:,:,1]` relative to the $k=0$ pixel, mirrored on to the right-hand-side (RHS), with red line indicating $k=0$ pixel position.
+3) A plot of the RHS mirrored on to the left like 2.
+4) A scatter plot of the [`energy_band_max()`](@ref) process applied to the three plots above. 
+
+This enables one to look at the difference between LHS and RHS.
+
+## Converting Pixels to $k$ and $E$
+Almost all of the functions will convert the data into appropriate physical values like energy $E~(\mathrm{eV})$ or $\mathrm{(meV)}$ and momentum $k~(\mathrm{m^{-1}})$. This section is included so that one knows how to do this themselves incase they need it for their own functions.
+
+To convert the wavelength data vector into energy values the package uses the function [`λ_to_E(λ)`](@ref). An example:
+```julia
+E = λ_to_E(λ30)
+``` 
+To convert the pixels from the PL data into momentum we use the [`pixel_to_k()`](@ref). This looks at the center of the PL data and finds the energy pixel with the highest intensity in that narrow domain in the center. It then fits a Lorentzian to the momentum distribution curve (MDC) for that energy value. The centroid of the lorentzian is determined as the $k=0$ pixel which is then plugged into the conversion equation for pixel to momentum:
+$$ k= (\mathrm{pixels} - \mathrm{pixel}(k_0))\cdot 4.22\times10^4 $$
+
+This method works well most of the time and has so far proved fairly robust against artifacts in the data . However, if one plots the energy dispersion produced by the EDC protocol and feels as though the k=0 pixel is off it can be corrected using [`shift_E()`](@ref) function as described in the [EDC](@ref) section.

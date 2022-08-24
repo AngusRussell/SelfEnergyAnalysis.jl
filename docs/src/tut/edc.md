@@ -38,5 +38,14 @@ Eb, kpoints = energy_band_max(BK30[:,:,1], λ30, true)   # Bare-band
 
 Em, kpoints = energy_band_max(BK30[:,:,8], λ30, true)   # Energy-band
 ```
+## Shifting $k=0$ pixel
+If you plot the energy bands and you feel that the k=0 poistion is not quite right it can be corrected using the [`shift_E()`](@ref) function. This function assumes the minimum energy of the dispersion occurs at $k=0$. Therefore, it may not be applicable to data with artifacts picked up in the EDC or near/above threshold.
 
+To correct the dispersion simply follow this example:
+```julia
+# Calculate your energy band and look at plot
+Em, kpoints = energy_band_max(BK30[:,:,8], λ30, true)   # Energy-band
+
+Em_new, kpoints_new = shift_E(Em, kpoints)
+```
 

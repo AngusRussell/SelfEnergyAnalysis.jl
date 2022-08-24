@@ -338,7 +338,7 @@ function remove_background(Data3D::Array, Background::Number)
         for i = 1:size(Data3D,1)
             for j = 1:size(Data3D,2)
                 if Data3D[i,j, k] < 1
-                    Data3D[i,j,k] = 1
+                    Data3D[i,j,k] = 0
                 end
             end
         end
@@ -450,8 +450,8 @@ julia> k(1:252)
 function pixel_to_k(Data2D::Array)
     L = size(Data2D,1)
     x = collect(1:L)
-    LB = int(L*0.5 -3)
-    UB = int(L*0.5 +3)
+    LB = int(L*0.5 -4)
+    UB = int(L*0.5 +4)
 
     max_x_index = argmax(Data2D[LB:UB,:])[1] + LB-1 # These numbers define te pixel window within which we look for 
     maxIdata = maximum(Data2D[LB:UB,:])
@@ -477,6 +477,7 @@ function pixel_to_k(Data2D::Array)
     k(x) = (x.-k0).* 4.22e4 # pixel to m^-1 conversion factor
     return k, k0
 end
+
 
 """
     λ_to_E(wavelength)

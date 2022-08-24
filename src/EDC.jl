@@ -386,3 +386,64 @@ function Plot_all_bands(Data3D, λ, protocol::String, last_index::Number=0)
         plt.legend(Legend)
     end
 end
+
+
+"""
+    shift_k()
+"""
+function shift_k(kpoints::Vector, pixel_shift)
+    pixel_minus_k0 = kpoints ./ 4.22e4
+    new_pixel = pixel_minus_k0 .- pixel_shift
+    new_k = new_pixel .* 4.22e4
+    return new_k
+end
+
+"""
+
+"""
+function shift_k(k0, pixel_shift)
+    k(x) = (x.-k0.-pixel_shift).*4.22e4
+    return k
+end
+
+"""
+
+"""
+function shift_k(new_k0)
+    k(x) = (x.-new_k0).*4.22e4
+    return k
+end
+
+"""
+    find_shift(Em)
+"""
+function find_shift(Em)
+    k_around_0 = collect(range(-0.5e6, 0.5e6, length = int(1e7)))
+    E_vals = Em(k_around_0)
+    shift = k_around_0[argmin(E_vals)] /4.22e4
+    return shift
+end
+
+"""
+    shift_E(Em, kpoints)
+
+Input the EDC energy band `Em` you want to correct and the corrpesponding `kpoints` Vector. 
+Returns a shifted `Em` and `kpoints`. 
+
+Note: This function assumes the minimum value of the band is at k=0. Therefore this function
+is not suitable for pump-powers approaching threshold.
+
+# Example
+```julia
+Eb_new, kpoints_new = shift_E(Eb, kpoints)
+```    
+"""
+function shift_E(Em, kpoints)
+    shift = find_shift(Em)
+    println("Shifted k=0 position by: $shift pixels")
+    println()
+    kpoints_new = shift_k(kpoints, shift)
+    E_vec = Em(kpoints)
+    E_new = Spline1D(kpoints_new, E_vec)
+    return E_new, kpoints_new
+end
